@@ -51,7 +51,12 @@ node {
     stage('Build') {
         docker.image('python:2-alpine').inside("--entrypoint=''") {
             sh 'mkdir -p ' + codeDir  // Create a directory for code in the container
-            sh 'cp -r sources/. ' + codeDir  // Copy source files to the container directory
+            
+            // Create a tar archive of the sources directory
+            sh 'tar -czf /tmp/code/sources.tar.gz -C /home/simple-python-pyinstaller-app sources'
+            
+            // Extract the tar archive inside the container
+            sh 'tar -xzf /tmp/code/sources.tar.gz -C ' + codeDir
             sh 'python -m py_compile ' + codeDir + '/add2vals.py ' + codeDir + '/calc.py'
         }
     }
@@ -59,7 +64,9 @@ node {
     stage('Test') {
         docker.image('qnib/pytest').inside("--entrypoint=''") {
             sh 'mkdir -p ' + codeDir  // Create a directory for code in the container
-            sh 'cp -r sources/. ' + codeDir  // Copy source files to the container directory
+            
+            // Extract the tar archive inside the container
+            sh 'tar -xzf /tmp/code/sources.tar.gz -C ' + codeDir
             sh 'py.test --verbose --junit-xml test-reports/results.xml ' + codeDir + '/test_calc.py'
         }
         post {
