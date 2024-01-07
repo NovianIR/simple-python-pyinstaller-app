@@ -29,12 +29,12 @@
 
 node {
     stage('Build') {
-        docker.image('python:2-alpine') {
+        docker.image('python:2-alpine').inside("--entrypoint=''") {
             sh 'python -m py_compile Jenkins/sources/add2vals.py Jenkins/sources/calc.py'
             }
        }
     stage('Test') {
-        docker.image('qnib/pytest') {
+        docker.image('qnib/pytest').inside("--entrypoint=''") {
             sh 'py.test --verbose --junit-xml test-reports/results.xml Jenkins/sources/test_calc.py'
             }
             post {
