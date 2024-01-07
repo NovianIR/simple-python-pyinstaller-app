@@ -37,7 +37,7 @@ node {
     stage('Test') {
         docker.image('qnib/pytest').inside("--entrypoint=''") {
             checkout scm
-            sh 'py.test --verbose --junit-xml test-reports/results.xml s./ources/test_calc.py'
+            sh 'py.test --verbose --junit-xml test-reports/results.xml ./sources/test_calc.py'
             }
             post {
                 always {
