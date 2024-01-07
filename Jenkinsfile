@@ -51,7 +51,7 @@ node {
     stage('Build') {
         docker.image('python:2-alpine').inside("--entrypoint=''") {
             sh 'mkdir -p ' + codeDir  // Create a directory for code in the container
-            sh 'cp -r sources/* ' + codeDir  // Copy source files to the container directory
+            sh 'cp -r sources/. ' + codeDir  // Copy source files to the container directory
             sh 'python -m py_compile ' + codeDir + '/add2vals.py ' + codeDir + '/calc.py'
         }
     }
@@ -59,7 +59,7 @@ node {
     stage('Test') {
         docker.image('qnib/pytest').inside("--entrypoint=''") {
             sh 'mkdir -p ' + codeDir  // Create a directory for code in the container
-            sh 'cp -r sources/* ' + codeDir  // Copy source files to the container directory
+            sh 'cp -r sources/. ' + codeDir  // Copy source files to the container directory
             sh 'py.test --verbose --junit-xml test-reports/results.xml ' + codeDir + '/test_calc.py'
         }
         post {
