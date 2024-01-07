@@ -30,12 +30,12 @@
 node {
     stage('Build') {
         docker.image('python:2-alpine') {
-            sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+            sh 'python -m py_compile Jenkins/sources/add2vals.py Jenkins/sources/calc.py'
             }
        }
     stage('Test') {
         docker.image('qnib/pytest') {
-            sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+            sh 'py.test --verbose --junit-xml test-reports/results.xml Jenkins/sources/test_calc.py'
             }
             post {
                 always {
