@@ -46,7 +46,7 @@
 // }
 
 node {
-    def codeDir = '/home/jenkins/code'  // Define a directory to store code in the Docker container
+    def codeDir = '/tmp/code'  // Define a directory to store code in the Docker container
 
     stage('Build') {
         docker.image('python:2-alpine').inside("--entrypoint=''") {
