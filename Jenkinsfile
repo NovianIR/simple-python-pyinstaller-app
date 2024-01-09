@@ -43,9 +43,9 @@ node {
     }
     stage('Deploy') {
         input(message: 'Lanjutkan ke tahap Deploy?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
-        docker.image('python:3.12.1-alpine3.19').inside("--entrypoint=''") {
+        docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
             checkout scm
-             sh 'pyinstaller --onefile ./sources/add2vals.py'
+             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
             }
 }
 }
