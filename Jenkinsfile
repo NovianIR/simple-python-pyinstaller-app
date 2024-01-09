@@ -44,8 +44,7 @@ node {
     stage('Deploy') {
         input(message: 'Lanjutkan ke tahap Deploy?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
-            checkout scm
-             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+             'pyinstaller --onefile sources/add2vals.py'
             }
 }
 }
