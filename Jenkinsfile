@@ -49,5 +49,5 @@ node {
              sh 'pyinstaller --onefile ./sources/add2vals.py'
             }
 }
-
+}
 
