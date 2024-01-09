@@ -34,6 +34,7 @@ node {
             sh 'python -m py_compile ./sources/add2vals.py ./sources/calc.py'
             }
        }
+
     stage('Test') {
         docker.image('qnib/pytest').inside("--entrypoint=''") {
             checkout scm
@@ -41,7 +42,7 @@ node {
             }
     }
     stage('Deploy') {
-        input(message: 'Do you want to proceed?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
+        input(message: 'Lanjutkan ke tahap Deploy?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
             checkout scm
              sh 'pyinstaller --onefile ./sources/add2vals.py'
