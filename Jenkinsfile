@@ -40,10 +40,8 @@ node {
             sh 'py.test --verbose --junit-xml test-reports/results.xml ./sources/test_calc.py'
             }
     }
-    stage ('Manual Approval'){
-        input(message: 'Do you want to proceed?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
-    }
     stage('Deploy') {
+        input(message: 'Do you want to proceed?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
             checkout scm
              sh 'pyinstaller --onefile ./sources/add2vals.py'
