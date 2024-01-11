@@ -78,6 +78,10 @@ environment {
              'pyinstaller --onefile sources/add2vals.py'
               sh 'sleep 60'
               sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
+
+            }
+            docker.image('timbru31/node-alpine-git:16').inside("--entrypoint=''") {
+              sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
             }
 }
 }
