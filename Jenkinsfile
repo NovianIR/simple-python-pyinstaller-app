@@ -54,10 +54,6 @@
 // }
 
 node {
-    environment {
-        GITHUB_TOKEN     = credentials('jenkins-github-token')
-        GITHUB_REPOSITORY = 'NovianIR/simple-python-pyinstaller-app'
-    }
     stage('Build') {
         docker.image('python:2-alpine').inside("--entrypoint=''") {
             checkout scm
@@ -76,9 +72,6 @@ node {
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
              'pyinstaller --onefile sources/add2vals.py'
               sh 'sleep 60'
-            }
-            docker.image('timbru31/node-alpine-git:16').inside("--entrypoint=''") {
-            sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
             }
 }
 }
