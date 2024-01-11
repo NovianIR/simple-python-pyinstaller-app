@@ -75,7 +75,7 @@ node {
         input(message: 'Lanjutkan ke tahap Deploy?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
              'pyinstaller --onefile sources/add2vals.py'
-
+                sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
              sh 'sleep 60'
             }
 }
