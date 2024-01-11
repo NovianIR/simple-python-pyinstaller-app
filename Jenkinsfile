@@ -71,35 +71,10 @@ node {
         input(message: 'Lanjutkan ke tahap Deploy?', submitter: 'user1,user2', submitterParameter: 'APPROVE')
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
              'pyinstaller --onefile sources/add2vals.py'
-            //   sh 'sleep 60'
+              sh 'sleep 60'
              }
-             // Add the deployment to GitHub Pages
-        script {
-            def ghPagesDir = "${WORKSPACE}/gh-pages"
-
-            // Clone the repository again to a different directory
-            checkout([$class: 'GitSCM',
-                      branches: [[name: '*/gh-pages']],
-                      doGenerateSubmoduleConfigurations: false,
-                      extensions: [[$class: 'CleanBeforeCheckout']],
-                      submoduleCfg: [],
-                      userRemoteConfigs: [[url: 'https://github.com/NovianIR/simple-python-pyinstaller-app.git']]])
-
-            // Create or clean the gh-pages branch
-            sh "git checkout -B gh-pages"
-
-            // Copy the built files to the gh-pages branch
-            sh "cp -r ${WORKSPACE}/dist/* ${ghPagesDir}"
-
-            // Commit and push changes to gh-pages branch
-            sh "git add ."
-            sh "git commit -m 'Deploy to GitHub Pages'"
-            sh "git push origin gh-pages"
-
-            // Clean up the gh-pages directory
-            sh "rm -rf ${ghPagesDir}"
+     
             
-}
 }
 }
 
