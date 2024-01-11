@@ -83,7 +83,7 @@ node {
                       doGenerateSubmoduleConfigurations: false,
                       extensions: [[$class: 'CleanBeforeCheckout']],
                       submoduleCfg: [],
-                      userRemoteConfigs: [[url: 'https://github.com/NovianIR/gh-pages.git']]])
+                      userRemoteConfigs: [[url: 'https://github.com/NovianIR/simple-python-pyinstaller-app.git']]])
 
             // Create or clean the gh-pages branch
             sh "git checkout -B gh-pages"
