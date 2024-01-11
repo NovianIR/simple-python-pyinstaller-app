@@ -54,11 +54,6 @@
 // }
 
 node {
-environment {
-        GITHUB_TOKEN     = credentials('jenkins-github-token')
-        GITHUB_REPOSITORY = 'NovianIR/simple-python-pyinstaller-app'
-    }
-
     stage('Build') {
         docker.image('python:2-alpine').inside("--entrypoint=''") {
             checkout scm
@@ -77,12 +72,34 @@ environment {
         docker.image('cdrx/pyinstaller-linux:python2').inside("--entrypoint=''") {
              'pyinstaller --onefile sources/add2vals.py'
               sh 'sleep 60'
-              sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
+             }
+             // Add the deployment to GitHub Pages
+        script {
+            def ghPagesDir = "${WORKSPACE}/gh-pages"
 
-            }
-            docker.image('timbru31/node-alpine-git:16').inside("--entrypoint=''") {
-              sh 'chmod +x ./jenkins/github-pages.sh && ./jenkins/github-pages.sh'
-            }
+            // Clone the repository again to a different directory
+            checkout([$class: 'GitSCM',
+                      branches: [[name: '*/gh-pages']],
+                      doGenerateSubmoduleConfigurations: false,
+                      extensions: [[$class: 'CleanBeforeCheckout']],
+                      submoduleCfg: [],
+                      userRemoteConfigs: [[url: 'simple-python-pyinstaller-app.git']]])
+
+            // Create or clean the gh-pages branch
+            sh "git checkout -B gh-pages"
+
+            // Copy the built files to the gh-pages branch
+            sh "cp -r ${WORKSPACE}/dist/* ${ghPagesDir}"
+
+            // Commit and push changes to gh-pages branch
+            sh "git add ."
+            sh "git commit -m 'Deploy to GitHub Pages'"
+            sh "git push origin gh-pages"
+
+            // Clean up the gh-pages directory
+            sh "rm -rf ${ghPagesDir}"
+            
+}
 }
 }
 
