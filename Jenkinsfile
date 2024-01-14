@@ -47,7 +47,6 @@ pipeline {
             post {
                 success {
                     archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
-                    sh "ls -la ${env.BUILD_ID}/sources/dist"
                     script{
                         sshagent (credential: [jenkins-cloud]){
                             sh "scp -o StrictHostKeyChecking=no -r ${env.BUILD_ID}/sources/dist/add2vals ubuntu@18.136.211.111:/home/PythonApp"
