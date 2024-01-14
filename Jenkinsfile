@@ -30,7 +30,7 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') { 
+        stage('Deploy') { 
             agent any
             environment { 
                 VOLUME = '$(pwd)/sources:/src'
@@ -47,7 +47,15 @@ pipeline {
             post {
                 success {
                     archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+                    sh "ls -la ${env.BUILD_ID}/sources/dist"
+                    script{
+                        sshagent (credential: [jenkins-cloud]){
+                            sh "scp -o StrictHostKeyChecking=no -r ${env.BUILD_ID}/sources/dist/add2vals ubuntu@18.136.211.111:/home/PythonApp"
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 chmod +x /home/PythonApp/add2vals"
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 /home/PythonApp/add2vals 25 43"
+                        }
+                        sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+                    }
                 }
             }
         }
