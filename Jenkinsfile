@@ -54,9 +54,9 @@ pipeline {
                     archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
                     script{
                         sshagent (credentials: ['jenkins-cloud']){
-                            sh "scp -o StrictHostKeyChecking=no -r ${env.BUILD_ID}/sources/dist/add2vals ubuntu@18.136.211.111:/home/PythonApp"
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 chmod +x /home/PythonApp/add2vals"
-                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 /home/PythonApp/add2vals 25 43"
+                            sh "scp -o StrictHostKeyChecking=no -r ${env.BUILD_ID}/sources/dist/add2vals ubuntu@18.136.211.111:/home/ubuntu/PythonApp"
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 chmod +x /home/ubuntu/PythonApp/add2vals"
+                            sh "ssh -o StrictHostKeyChecking=no ubuntu@18.136.211.111 /home/ubuntu/PythonApp/add2vals 25 43"
                         }
                         sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                     }
